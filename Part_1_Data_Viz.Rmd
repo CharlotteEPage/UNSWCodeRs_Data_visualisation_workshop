@@ -1,0 +1,9 @@
+---
+title: "Part 1 Data Visualisation using R: giving a CRAP with ggplot"
+output: html_notebook
+author: C E Page, F Robinson
+---
+
+***
+# Part 1: giving a CRAP with ggplot 
+***
