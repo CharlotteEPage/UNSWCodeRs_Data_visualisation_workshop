@@ -110,15 +110,87 @@ Some of these principles we can look to directly apply during graphics creation 
 
 If two items are not exactly the same, make them different! Applying contrast can help attract attention to important elements, and groups of elements by making them stand out. 
 
-How? There are a number of ways we can bring contrast into our designs in R: 
 
-** Examples to be inserted below** 
+We can look to do this in plots by emphasising group difference with colour and size, in addition to using different font families, and font sizes for plot annotation. We will learn how to specify fonts and font sizes in ggplot theme() in section R - Repetition below. There are many fonts, and font weights (i.e. **bold**, *italic*, light) you can specify in R. 
 
-*  Fonts 
+Below is code that creates a plot of some example fonts and font weights you can specify in R:
 
-*  Colour 
+```{r}
 
-*  Size
+```
+
+```{r}
+
+```
+
+
+Colour is also a powerful tool and can be used to explain levels of data (e.g. through application of a gradient) in addition to simple, and more complex hierachical grouping structures. 
+
+Some great online tools for choose palettes based on colour theory: 
+
+
++ adobe colour 
+
+
+When we think about including colour in our graphics we need to make sure we think about useability and accessability; where we make sure that the palette (range of colours) we choose are not misleading, and are differentiatable for those with varying colourblindness.
+
+
+To help deal with problems associated with useability and accessability there are a number of really useful packages developed in R (in addition to a colour blind checker on adobe colour!). These include: 
+
+
+  + Greys
+
+  Sometimes absence of colour can be more powerful in communicating ideas. R has a number of built in grey palettes. 
+  
+  Usage in ggplot: 
+      
+        + scale_fill_grey() for box plot, bar plot, violin plot, dot plot etc.
+        
+        + scale_color_grey() for lines and points
+        
+
++ RColorBrewer palettes
+  
+  The RColorBrewer package creates great palettes - that can also be filtered to be colourblind friendly.
+  
+  The package contains 3 sets of color palette: sequential, qualitative and diverging. Understanding these groupings of    colour can help in choosing how to include colour within your plots.
+  
+  1. Sequential - ordered data that progress from low to high.
+  
+  2. Qualitative - best suited for nominal or categorical data where colour does not imply magnitude between groups.
+  
+  3. Diverging - these put equal emphasis on mid-range and extreme values at both ends of the data range.
+  
+  Below are a few useful commands in RColorBrewer:
+  
+ 
+```{r}
+# Display all colour palettes 
+display.brewer.all()
+
+# Display only colourblind friendly palettes
+display.brewer.all(n = NULL, type = "all", select = NULL, # type = "div","qual","seq"
+                   colorblindFriendly = TRUE)
+
+#  Return the hexadecimal color specification 
+# brewer.pal(n, name) # where n is the number of colours you want from the palette - minimum is 3!
+
+# Display a single RColorBrewer palette 
+# by specifying its name
+# display.brewer.pal(n, name)
+
+```
+
+  Usage in ggplot
+  
+  
+      + scale_fill_brewer() for box plot, bar plot, violin plot, dot plot etc.
+      
+      + scale_color_brewer() for lines and points
+
+
+We can also change the size of the elements in a graph - which in itself can present data values.
+
 
 
 #### R - Repetition 
