@@ -5,7 +5,6 @@ This repository is for the development and eventual release of code for a data v
 ***
 # Data Visualisation using R
 
-
 Welcome to the world of data visualisation! 
 
 In this workshop we aim to give you a taste of what can be possible in R. We will 
