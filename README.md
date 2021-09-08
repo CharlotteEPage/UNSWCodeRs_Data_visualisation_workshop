@@ -8,7 +8,7 @@ This repository is for the development and eventual release of code for a data v
 Welcome to the world of data visualisation! 
 
 In this workshop we aim to give you a taste of what can be possible in R. We will 
-dazzle you with an introduction **or recap??**  to graphics creation using ggplot(), before we then present some core graphical principles (CRAP - Contrast, Repitition and Alignment). Through applying CRAP you'll find out how we can look to better visualise data through creating plots that present results and findings in clear and effective ways, better communicating the work you do! We will then present a worked example, where we evolve a plot from basic visualisation, to a publication ready rain cloud plot. 
+dazzle you with an introduction **or recap??**  to graphics creation using ggplot(), before we then change how you see data through presentation of some core graphical principles (CRAP - Contrast, Repitition and Alignment). Through applying CRAP you'll find out how we can look to better visualise data through creating plots that present results and findings in clear and effective ways, better communicating the work you do! We will then present a worked example, where we evolve a plot from basic visualisation, to a publication ready rain cloud plot. 
 
 This course assumes you have some basic coding skills in R. We provide an overview of ggplot() and provide code for all worked examples.
 
