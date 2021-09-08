@@ -4,6 +4,145 @@ output: html_notebook
 author: C E Page, F Robinson
 ---
 
+
+What do we need to consider when creating visualisations?
+
+1. Begin by defining the purpose of your visual(s), and its intended audience.
+
+2. Choose appropriate form(s) for the intended purpose and function. A LITTLE BIT OF THIS
+
+3. Consider how best to visualise the data using design principles (CRAP). **THIS WORKSHOP**
+
 ***
 # Part 1: giving a CRAP with ggplot 
 ***
+
+
+Goals of Part 1:
+
+
+1. __ggplot__ - how building a `ggplot` works - step by step.
+
+
+2. __CRAP & ggplot?__ - core graphical principles (CRAP - Contrast, Repition, Alignment and Proximity) that when applied to data in R can help visualise science in a meaningful (and beautiful) way!
+
+
+3. __what plot?__ - choosing what plot is also key to great data visualisation! This deserves a whole tutorial in itself, so today we just point to some of the options you have in R, and resources you can consult for further direction!
+
+
+```{r eval=T, echo=T, message = FALSE}
+# Load libraries 
+# if you need to install these run the code install.packages("package_name")
+
+library(tidyverse)
+library(ggthemes)
+library(ggrepel) # for annotations 
+library(viridis) # for color blind friendly colours 
+library(RColorBrewer) 
+library(reshape2)
+
+```
+
+
+***
+### 1. __ggplot__ 
+***
+
+**Fiona please feel free to take or leave what you want from the below - I shan't be offended :) )**
+
+`ggplot2` is a powerful R package developed by Hadley Wickham (REF). It is part of the tidyverse and is arguably most effective for creating publication quality graphics. There are many extension packages for ggplot which can make it easy to reproduce specialised types of graphs (e.g. survival plots, geographic maps).
+
+
+The gg in `ggplot2` stands for the Grammar of Graphics - this is a graphics concept which describes plots by using a specified "grammar".  
+
+
+A plot can be divided into several fundamental parts:
+
+1. __data__ a tidy data frame.
+2. __aes__ visual properties that get mapped onto values in a data set (colour, size, shape etc.). This inclues specifying the variables to be plotted (x,y).
+3. __geom__ corresponds to the type of plot you are trying to make (histogram, box plot, line plot, density plot, dot plot...).
+4. __stat__ a stat layer applies some kind of statistical transformation to the data. For example `stat_smooth(method = "lm")` displays a linear regression line with confidence intervals.
+5. __theme__ a theme is a set of visual parameters that controls the background, borders, text, legend position etc. You can use predefined themes or create your own (see below!).
+
+There are two main funtions for creating plots in the ggplot2 package: a `qplot()` and `ggplot()` function: 
+
++ `qplot()` quick plot function easy to use for simple plots
++ `ggplot()` more flexible function that allows you to build a plot piece by piece
+
+Plots can be saved as a variable using <- assign, and printed at any time by calling the variable. 
+
+After creating a plot use `ggsave` to save a plot in the current working directory. 
+
+
+
+##### Coding a ggplot
+
+
+
+The key to understanding `ggplot2` is thinking about a figure in layers built using these multiple componants (the core being the data, aesthetics and geom) **(NOTE - I think it would be nice to do a live code example here! We could take participants through building a really simple ggplot with each of these aspects of the plot. i.e. first you specify the data (tidy data, what is tidy data for ggplot? LONG format), and then set up the aesthetics...etc.). It would be great if we could also show how to edit themes using theme() as an introduction to specifying a theme. Maybe it would also be worth showing how to save ggplots as pdfs, jpgs etc.**
+
+ggplot follows this template: **(NOTE - I have currently specificed x and y as aes within each geom. I figure this makes understanding how to add multiple plot types into one easier to understand for part 2 rain cloud plot.)**
+
+
+```{r eval=F, echo=T}
+
+ggplot(data = DATA) + 
+  geom_function(mapping = aes(AESTHETIC MAPPINGS))
+
+```
+
+
+***
+### 2. __CRAP & ggplot__ 
+***
+
+We can look to use some simple core graphical principles (CRAP - Contrast, Repition, Alignment and Proximity) that when applied to can help visualise data in a beautiful (and meaningful) way! The CRAP principles of design were developed by Robin Williams (REF) and refur to the four basic principles of design that xxxx.
+
+
+**(CP to provide more background here, in addition to links to other useful resources - also add graphic detailing what each of the main words mean)**
+
+
+Some of these principles we can look to directly apply during graphics creation in R, whereas others can be applied during figure creation, or even during production of graphical abstracts. 
+
+
+#### C - Contrast 
+
+
+If two items are not exactly the same, make them different! Applying contrast can help attract attention to important elements, and groups of elements by making them stand out. 
+
+How? There are a number of ways we can bring contrast into our designs in R: 
+
+** Examples to be inserted below** 
+
+*  Fonts 
+
+*  Colour 
+
+*  Size
+
+
+#### R - Repetition 
+
+
+Repeat things in your design, throughout your design. This helps creats a consistent look and feel, where recurring elements can help organise content and establish a sense of unity. 
+
+How? There are a number of ways we can bring repitiion into our designs in R, namely through the use of themes.  
+
+
+#### A - Alignment 
+
+
+Nothing should be placed randomly on a page. Make sure that every item has some visual connection with something else.  
+
+How? In R we can look to align graphics we create using cowplot() (ref to other tutorial/resource) and patchwork().
+
+
+#### P - Proximity
+
+Group graphics together that are related. An important benefit here is that grouping graphics can organise information, and clarify concepts. This concept can be applied when using patchwork() to create groups of figures. 
+
+Tip: Try and group plots together from the same hypothesis group in your study, or plots that show results from the same method. 
+
+
+
+
