@@ -2,6 +2,8 @@
 title: "Part 1 Data Visualisation using R: giving a CRAP with ggplot"
 output: html_notebook
 author: C E Page, F Robinson
+editor_options: 
+  chunk_output_type: inline
 ---
 
 
@@ -49,6 +51,7 @@ library(reshape2)
 ***
 
 **Fiona please feel free to take or leave what you want from the below - I shan't be offended :) )**
+Lovely will do :)
 
 `ggplot2` is a powerful R package developed by Hadley Wickham (REF). It is part of the tidyverse and is arguably most effective for creating publication quality graphics. There are many extension packages for ggplot which can make it easy to reproduce specialised types of graphs (e.g. survival plots, geographic maps).
 
