@@ -50,49 +50,157 @@ library(reshape2)
 ### 1. __ggplot__ 
 ***
 
-**Fiona please feel free to take or leave what you want from the below - I shan't be offended :) )**
-Lovely will do :)
 
-`ggplot2` is a powerful R package developed by Hadley Wickham (REF). It is part of the tidyverse and is arguably most effective for creating publication quality graphics. There are many extension packages for ggplot which can make it easy to reproduce specialised types of graphs (e.g. survival plots, geographic maps).
+##### ggplot background
+`ggplot2` is a graphing R package developed by Hadley Wickham that can be used to create professional looking plots for papers, reports or assignments. 
+
+ggplot is part of the tidyverse and so can be used easily with other tidyverse packages like dplyr and tidyr. 
+
+With ggplot, you can create a variety of plots inclusing, boxplots, scatterplots, histograms, bar graphs and maps. Many extension packages for ggplot also exist which can make it easy to reproduce specialised types of graphs (e.g. survival plots, geographic maps).
 
 
-The gg in `ggplot2` stands for the Grammar of Graphics - this is a graphics concept which describes plots by using a specified "grammar".  
+The gg in `ggplot2` stands for "The Grammar of Graphics" - this is book describing the graphics concept which describes plots by using a specified "grammar".  
 
 
-A plot can be divided into several fundamental parts:
 
-1. __data__ a tidy data frame.
-2. __aes__ visual properties that get mapped onto values in a data set (colour, size, shape etc.). This inclues specifying the variables to be plotted (x,y).
+##### ggplot basics
+A plot can be divided into several fundamental components:
+
+A ggplot can be thought of as building a plot through pulling together basic components. The most basic minimum components for any graph is 1. data 2. specified variables 3. the type of plot. Pretty much what data, which specific data where and how to plot. 
+
+These components can be added in different ways, today we're going to focus on the most basic usage. 
+
+
+1. __data__  a tidy data frame that holds the variables you would like to plot.
+
+2. __aes__ aes specifies which variables to plot (i.e. your x and y variables). aes is where you state the visual properties that get mapped onto values in a data set (colour, size, shape etc.). This inclues specifying the variables to be plotted (x,y).
+
+This code commonly causes confusion when creating ggplots. While aes stands for aesthetics, in ggplot it does not relate to the visual look of the graph but rather what data you want to see in the graph. It specifies what the graph presents rather than how it is presented. 
+
 3. __geom__ corresponds to the type of plot you are trying to make (histogram, box plot, line plot, density plot, dot plot...).
-4. __stat__ a stat layer applies some kind of statistical transformation to the data. For example `stat_smooth(method = "lm")` displays a linear regression line with confidence intervals.
-5. __theme__ a theme is a set of visual parameters that controls the background, borders, text, legend position etc. You can use predefined themes or create your own (see below!).
 
-There are two main funtions for creating plots in the ggplot2 package: a `qplot()` and `ggplot()` function: 
+
+
+
+
+
+
+
+
+There are two main functions for creating plots in the ggplot2 package: a `qplot()` and `ggplot()` function: 
 
 + `qplot()` quick plot function easy to use for simple plots
 + `ggplot()` more flexible function that allows you to build a plot piece by piece
-
-Plots can be saved as a variable using <- assign, and printed at any time by calling the variable. 
-
-After creating a plot use `ggsave` to save a plot in the current working directory. 
 
 
 
 ##### Coding a ggplot
 
 
+##### qplot for quick plot
+```{r}
+qplot(data = iris, x = Petal.Width)
 
-The key to understanding `ggplot2` is thinking about a figure in layers built using these multiple componants (the core being the data, aesthetics and geom) **(NOTE - I think it would be nice to do a live code example here! We could take participants through building a really simple ggplot with each of these aspects of the plot. i.e. first you specify the data (tidy data, what is tidy data for ggplot? LONG format), and then set up the aesthetics...etc.). It would be great if we could also show how to edit themes using theme() as an introduction to specifying a theme. Maybe it would also be worth showing how to save ggplots as pdfs, jpgs etc.**
+qplot(data = iris, x = Petal.Width, y = Petal.Length)
+```
 
-ggplot follows this template: **(NOTE - I have currently specificed x and y as aes within each geom. I figure this makes understanding how to add multiple plot types into one easier to understand for part 2 rain cloud plot.)**
+
+##### ggplot
+```{r}
+data("iris")
+str(iris)
+#confirm the class of the variables
+
+#component 1 data
+ggplot(data = iris)
+
+#component 2 variables
+ggplot(iris, aes(x = Petal.Width, y = Petal.Length))
+
+#component 3 variable
+ggplot(data = iris, aes(x = Petal.Width, y = Petal.Length)) + geom_point()
+
+
+
+
+```
+
+
+Remember those open and closed brackets after geom_point(). Without those, nothing will happen
+
+
+The type of graph you want to make has to match the classes of the inputs. For example, a scatterplot would require both variables to be numeric. Or a boxplot would require the x variable to be a factor and the y variable to be numeric. You can check the class of any variable with the class function, or all variables in a data frame with the str function.
+
+
+```{r}
+
+ggplot(iris, aes(Species, Petal.Width)) + geom_boxplot()
+
+ggplot(iris, aes(Petal.Length, Petal.Width)) + geom_boxplot()
+
+ggplot(iris, aes(Petal.Width)) + geom_boxplot()
+
+```
+
+
+
+
+##### assign plots and print them
+
+A helpful practise when making ggplots is to assign the plot you’ve made to an object (e.g., plot1 in the code above) and then ‘print’ it separately. As your ggplot becomes more complicated this will make it much easier.
+
+
+Plots can be saved as a variable using <- assign, and printed at any time by calling the variable. 
+
+
+```{r}
+iris_petal_width_to_length_plot <- ggplot(data = iris, aes(x = Petal.Width, y = Petal.Length)) + geom_point()
+
+iris_petal_width_to_length_plot + theme_bw() + labs(title = "Iris Petal Length to Width")
+
+
+```
+
+
+
+Other components: 
+4. __theme__ a theme is a set of visual parameters that controls the background, borders, text, legend position etc. You can use predefined themes or create your own (see below!).
+
+
+
+
+
+5. __stat__ a stat layer applies some kind of statistical transformation to the data. For example `stat_smooth(method = "lm")` displays a linear regression line with confidence intervals.
+
+
+
+After creating a plot use `ggsave` to save a plot in the current working directory. 
+
+
+save your plot
+```{r}
+pdf()
+
+dev.off()
+```
+
+
+
+ggplot follows this template: **(NOTE - I have currently specificed x and y as aes within each geom. I figure this makes understanding how to add multiple plot types into one easier to understand for part 2 rain cloud plot.)** 
+
 
 
 ```{r eval=F, echo=T}
+
 
 ggplot(data = DATA) + 
   geom_function(mapping = aes(AESTHETIC MAPPINGS))
 
 ```
+
+
+
+
 
 
 ***
