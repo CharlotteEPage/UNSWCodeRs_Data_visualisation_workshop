@@ -2,3 +2,9 @@
 .Rhistory
 .RData
 .Ruserdata
+<<<<<<< HEAD
+=======
+
+#html files
+*.html
+>>>>>>> e0b03af1d0aaf0e783a4f874d770b1999277404f
