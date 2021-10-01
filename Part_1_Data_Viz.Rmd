@@ -7,13 +7,14 @@ editor_options:
 ---
 
 
-What do we need to consider when creating visualisations?
+What do we need to consider when creating visualisations of our data?
 
 1. Begin by defining the purpose of your visual(s), and its intended audience.
 
-2. Choose appropriate form(s) for the intended purpose and function. A LITTLE BIT OF THIS
+2. Choose appropriate form(s) for the intended purpose and function. **A LITTLE BIT OF THIS**
 
 3. Consider how best to visualise the data using design principles (CRAP). **THIS WORKSHOP**
+
 
 ***
 # Part 1: giving a CRAP with ggplot 
@@ -29,7 +30,7 @@ Goals of Part 1:
 2. __CRAP & ggplot?__ - core graphical principles (CRAP - Contrast, Repition, Alignment and Proximity) that when applied to data in R can help visualise science in a meaningful (and beautiful) way!
 
 
-3. __what plot?__ - choosing what plot is also key to great data visualisation! This deserves a whole tutorial in itself, so today we just point to some of the options you have in R, and resources you can consult for further direction!
+3. __what plot?__ - choosing what plot is also key to great data visualisation! This deserves a whole tutorial in itself, so today we just point to some of the options you have in R, and resources you can consult for further direction.
 
 
 ```{r eval=T, echo=T, message = FALSE}
