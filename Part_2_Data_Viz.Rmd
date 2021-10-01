@@ -1,8 +1,280 @@
 ---
-title: "Part 2 Data Visualisation using R: from basic plot to publication ready, evolving a ggplot()"
-output: html_notebook
-author: C E Page, F Robinson
-editor_options: 
+title: 'Part 2 Data Visualisation using R: from basic plot to publication ready, evolving
+  a ggplot()'
+author: "C E Page, F Robinson"
+output:
+  html_document:
+    df_print: paged
+editor_options:
   chunk_output_type: inline
 ---
+
+
+Today we are going to focus on how we can move plots along from a quick exploration of data - to a plot that clearly presents your data and illustrates your findings. We will do this by working through an example where we will make a plot type called a raincloud plot.
+
+
+Goals of Part 2: 
+
+
+1. Evolve a plot from basic visualisation to a raincloud plot!
+
+
+
+(Note: We will be manipulating the data using functions from tidyverse - including pipes (%>%). These are great for streamlining code. You can find an introduction to using them here .)
+
+
+![Evolution of a ggplot](ggplot_evolution.png)
+
+
+```{r}
+
+# Libraries 
+
+# if you need to install these run the code install.packages("package_name")
+library(tidyverse)
+library(ggthemes)
+library(ggrepel) # for annotations 
+library(viridis) # for color blind friendly colours 
+library(ggdist)
+
+```
+
+
+Ref: [Twitter thread link](https://twitter.com/CedScherer/status/1375438100298674179?ref_src=twsrc%5Etfw%7Ctwcamp%5Etweetembed%7Ctwterm%5E1375438100298674179%7Ctwgr%5E%7Ctwcon%5Es1_&ref_url=https%3A%2F%2Fwww.cedricscherer.com%2F2021%2F06%2F06%2Fvisualizing-distributions-with-raincloud-plots-with-ggplot2%2F)
+(Note: they have developed a package called 'raincloud plot'- however this is not yet on CRAN, it also wraps ggplot functionality into one function, instead of geoms. This means you can't edit each layer separately.)
+
+
+A raincloud plot is three plot types into one: 
+
+1. __Box plot__
+
+2. __Density plot__ (histogram)
+
+3. __Scatter plot__
+
+Developed to overcome issues associated with masking distributions of data when plotting columns with error-bars. Raincloud plots allow visualisation of the raw data, distribution of the data as density and key summary statistics all at the same time. 
+
+
+### Worked example: Visualising distributions (and make them rain data with raincloud plots)
+
+> Behind every mean there is a distribution, and that distribution has a story to tell.
+
+https://ourcodingclub.github.io/tutorials/dataviz-beautification
+
+
+***
+
+
+*This part of the workshop is based on tutorials:*
+
+*1. https://www.cedricscherer.com/2021/06/06/visualizing-distributions-with-raincloud-plots-with-ggplot2/*
+
+*2. https://ourcodingclub.github.io/tutorials/dataviz-beautification/#distributions*
+
+
+
+A rain cloud plot is a hybrid plot that brings together three plot types. They were first presented in 2019 and have since received a lot of attention on social media :[](https://twitter.com/micahgallen/status/1112780615198429185?lang=en
+https://wellcomeopenresearch.org/articles/4-63/v1). 
+
+![](Raincloud_meme.jpeg)
+
+[Twitter thread link] (https://twitter.com/CedScherer/status/1375438100298674179?ref_src=twsrc%5Etfw%7Ctwcamp%5Etweetembed%7Ctwterm%5E1375438100298674179%7Ctwgr%5E%7Ctwcon%5Es1_&ref_url=https%3A%2F%2Fwww.cedricscherer.com%2F2021%2F06%2F06%2Fvisualizing-distributions-with-raincloud-plots-with-ggplot2%2F)
+
+
+(Note: they have developed a package called 'raincloud plot'- however this is not yet on CRAN, it also wraps ggplot functionality into one function, instead of geoms. This means you can't edit each layer separately.)
+
+A raincloud plot is three plot types in one: 
+
+
+1. __Box plot__
+
+2. __Density plot__ (histogram)
+
+3. __Scatter plot__
+
+
+Developed to overcome issues associated with masking distributions of data when plotting columns with error-bars. Rain cloud plots allow visualisation of the raw data, distribution of the data as density and key summary statistics all at the same time. 
+
+
+__Data__ 
+
+
+The data we will be visualising is publicly available from the LTER Data Portal https://portal.lternet.edu/nis/home.jsp and comprise the coordinates of LTER sites and plant observations from an experiment at Niwot Ridge LTER.
+
+
+a. Loading the data 
+```{r}
+# Load data - site coordinates and plant records from the Long Term Ecological Research # Network 
+# Niwot Ridge site
+
+lter <- read.csv("lter.csv")
+
+niwot_plant_exp <- read.csv("niwot_plant_exp.csv")
+```
+
+This dataset is from a fertilisation experiment at Niwot Ridge LTER site. There are multiple plots per fertilisation treatment, and species occurence in each plot was monitoried over several years. 
+
+In this workshop we are going to produce a raincloud plot that compare species richness amongst fertiliser treatments over time.
+
+
+b.  First of all we need to calculate species richness: 
+```{r}
+# Calculate species richness per plot per year
+
+niwot_richness <- niwot_plant_exp %>% group_by(plot_num, year) %>%
+  mutate(richness = length(unique(USDA_Scientific_Name))) %>% ungroup()
+
+```
+
+
+c. Now we can visualise how species richness varies across fertilisation treatments.
+```{r}
+
+head(niwot_richness)
+
+distributions1 <- ggplot(niwot_richness, aes(x = fert, y = richness)) +
+    geom_violin()
+
+distributions1
+
+```
+
+d. A useful first look at the data distributions! Can we bring in some colour, and add our theme so that the plot is more clear.
+
+```{r}
+  
+distributions2 <- ggplot(niwot_richness, aes(x = fert, y = richness)) +
+    geom_violin(aes(fill = fert, colour = fert), alpha = 0.5) +   # alpha controls the opacity
+    scale_fill_viridis_d() + # Colour blind friendly palette
+
+    my_plot_theme() 
+
+distributions2
+```
+
+
+e. How about some summary statistics so we can begin to investigate differences between groups?
+
+```{r}
+# Overlay violins with box plots 
+
+distributions3 <- ggplot(niwot_richness, aes(x = fert, y = richness)) +
+    geom_violin(aes(fill = fert, colour = fert), alpha = 0.5) +
+    geom_boxplot(aes(colour = fert), width = 0.2) +
+    scale_fill_viridis_d() + # Colour blind friendly palette
+    my_plot_theme() 
+
+distributions3
+
+```
+
+Time to level up!
+
+
+f. Better still, we can add the raw data points to this plot. Adding raw points to the plot we just created would lead to a very messy plot...
+
+
+Instead we can apply a number of changes to this plot that allow for clear visualisation of the boxplot, distribution and raw data side by side. 
+Smoothing functions for violin plots can sometimes hide the true values of given variables - we can use ggdist() to add half violin plot. 
+Colour - hex codes. 
+Raw data - use lines instead of points 
+Add theme 
+
+
+```{r}
+
+
+distributions5 <- ggplot(niwot_richness, aes(x = fert, y = richness, fill = fert)) +
+ggdist::stat_halfeye(
+    adjust = .5, 
+    width = .6, 
+    .width = 0, 
+    justification = -.2, 
+    point_colour = NA,
+    alpha = 0.8
+  ) + 
+  geom_boxplot(
+    width = .15, 
+    outlier.shape = NA,
+    alpha = 0.8) +
+  geom_point(aes(y = richness, color = fert),
+    ## draw horizontal lines instead of points
+    size = 1.3,
+    alpha = .1,
+    position = position_jitter(
+      seed = 1, width = .1
+    )) +
+  coord_cartesian(xlim = c(1.2, NA), clip = "off") + 
+      # \n adds a new line which creates some space between the axis and axis title
+    labs(y = "Species richness\n", x = NULL) +
+    # Removing legends
+    #guides(fill = FALSE, color = FALSE) +
+    # Setting the limits of the y axis
+    scale_y_continuous(limits = c(0, 30)) +
+    # Picking nicer colours
+    scale_fill_manual(values = c("#5A4A6F", "#E47250",  "#EBB261", "#9D5A6C")) +
+    scale_colour_manual(values = c("#5A4A6F", "#E47250",  "#EBB261", "#9D5A6C")) +
+  my_plot_theme()
+
+distributions5
+
+# "#9D5A6C"
+
+```
+
+Finally, for a full rain cloud plot, we can flip the axis. 
+
+```{r}
+
+distributions5 + coord_flip()
+
+```
+
+
+```{r eval=F, echo=T}
+
+# Create new columns based on a combo of conditions using case_when()
+# A fictional example
+
+alpine_magic <- niwot_richness %>% mutate(fairy_dust = case_when(fert == "PP" | fert == "NP" |
+                                                                   fert == "NN" ~ "Fertiliser", fert == "CC" ~ "Control"))
+
+distributions_magic <- 
+    ggplot(data = alpine_magic, 
+           aes(x = reorder(fairy_dust, desc(richness)), y = richness, fill = fairy_dust)) +
+  ggdist::stat_halfeye(
+    adjust = .5, 
+    width = .6, 
+    .width = 0, 
+    justification = -.2, 
+    point_colour = NA,
+    alpha = 0.8
+  ) + 
+    geom_point(aes(y = richness, color = fairy_dust), 
+               position = position_jitter(width = 0.15), size = 1, alpha = 0.1) +
+    geom_boxplot(width = 0.2, outlier.shape = NA, alpha = 0.8) +
+    labs(y = "\nSpecies richness", x = NULL) +
+    scale_y_continuous(limits = c(0, 30)) +
+    scale_fill_manual(values = c("turquoise4", "magenta4")) +
+    scale_colour_manual(values = c("turquoise4", "magenta4")) +
+    coord_flip() +
+    my_plot_theme()
+
+distributions_magic
+
+```
+
+Finally - we can bring these two plots together using patchwork() before saving the plot as a pdf. 
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
 

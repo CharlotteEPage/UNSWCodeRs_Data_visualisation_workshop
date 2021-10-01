@@ -1,8 +1,10 @@
 ---
-title: "Part 1 Data Visualisation using R: giving a CRAP with ggplot"
-output: html_notebook
-author: C E Page, F Robinson
-editor_options: 
+title: 'Part 1 Data Visualisation using R: giving a CRAP with ggplot'
+author: "C E Page, F Robinson"
+output:
+  html_document:
+    df_print: paged
+editor_options:
   chunk_output_type: inline
 ---
 
@@ -53,6 +55,8 @@ library(reshape2)
 
 
 ##### ggplot background
+
+
 `ggplot2` is a graphing R package developed by Hadley Wickham that can be used to create professional looking plots for papers, reports or assignments. 
 
 ggplot is part of the tidyverse and so can be used easily with other tidyverse packages like dplyr and tidyr. 
@@ -65,6 +69,8 @@ The gg in `ggplot2` stands for "The Grammar of Graphics" - this is book describi
 
 
 ##### ggplot basics
+
+
 A plot can be divided into several fundamental components:
 
 A ggplot can be thought of as building a plot through pulling together basic components. The most basic minimum components for any graph is 1. data 2. specified variables 3. the type of plot. Pretty much what data, which specific data where and how to plot. 
@@ -146,7 +152,8 @@ ggplot(iris, aes(Petal.Width)) + geom_boxplot()
 
 
 
-##### assign plots and print them
+##### Assign plots and print them
+
 
 A helpful practise when making ggplots is to assign the plot you’ve made to an object (e.g., plot1 in the code above) and then ‘print’ it separately. As your ggplot becomes more complicated this will make it much easier.
 
@@ -164,7 +171,9 @@ iris_petal_width_to_length_plot + theme_bw() + labs(title = "Iris Petal Length t
 
 
 
-Other components: 
+##### Other components: 
+
+
 4. __theme__ a theme is a set of visual parameters that controls the background, borders, text, legend position etc. You can use predefined themes or create your own (see below!).
 
 
@@ -184,23 +193,6 @@ pdf()
 
 dev.off()
 ```
-
-
-
-ggplot follows this template: **(NOTE - I have currently specificed x and y as aes within each geom. I figure this makes understanding how to add multiple plot types into one easier to understand for part 2 rain cloud plot.)** 
-
-
-
-```{r eval=F, echo=T}
-
-
-ggplot(data = DATA) + 
-  geom_function(mapping = aes(AESTHETIC MAPPINGS))
-
-```
-
-
-
 
 
 
@@ -308,17 +300,55 @@ We can also change the size of the elements in a graph - which in itself can pre
 #### R - Repetition 
 
 
-Repeat things in your design, throughout your design. This helps creats a consistent look and feel, where recurring elements can help organise content and establish a sense of unity. 
+Repeat things in your design, throughout your design. This helps create a consistent look and feel, where recurring elements can help organise content and establish a sense of unity. 
 
-How? There are a number of ways we can bring repitiion into our designs in R, namely through the use of themes.  
+How? There are a number of ways we can bring repetition into our designs in R, namely through the use of themes.  
 
+Perfecting plots in ggplot can lead to a lot of lines starting with theme() quickly piling up. Doing this again for the next plot quickly leads to massive scripts with a lot of repetition. Instead, we suggest creating a customised theme for your manuscript/project that combines all of the elements in your theme that you want, and apply it to all of your plots for a project! You can add as many elements to your function as you want (as long as they do not contradict each other).
+
+Below we provide an example of a function that makes a theme based off theme_bw(). This function takes no arguments, so is always coded as theme_name().
+
+
+```{r}
+my_plot_theme <- function(){
+  theme_bw() +
+    theme(text = element_text(family = "Helvetica Light"), # Insert your favourite font
+          axis.text = element_text(size = 16), # Y and x axis font size
+          axis.title = element_text(size = 18), # Axis title font size
+          axis.line.x = element_line(color="black"), 
+          axis.line.y = element_line(color="black"), 
+          panel.border = element_blank(),
+          panel.grid.major.x = element_blank(),  # panel.grid adds a blank border to your plot.       
+          panel.grid.minor.x = element_blank(),
+          panel.grid.minor.y = element_blank(),
+          panel.grid.major.y = element_blank(),  
+          plot.margin = unit(c(1, 1, 1, 1), units = , "cm"), # Adjust your plot margins (in cm)
+          plot.title = element_text(size = 18, vjust = 1, hjust = 0), # Title font adjustments
+          legend.text = element_text(size = 12),          
+          legend.title = element_blank(),                              
+          legend.position = c(0.95, 0.15), 
+          legend.key = element_blank(),
+          legend.background = element_rect(color = "black", 
+                                           fill = "transparent", 
+                                           size = 2, linetype = "blank")) # Sets the legend background to transparent
+}
+
+# Lets try out this theme with a basic plot 
+# Feel free to play around with some of the specifications below. 
+
+ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species))+
+  geom_point() +
+  my_plot_theme()
+
+```
+```
 
 #### A - Alignment 
 
 
 Nothing should be placed randomly on a page. Make sure that every item has some visual connection with something else.  
 
-How? In R we can look to align graphics we create using cowplot() (ref to other tutorial/resource) and patchwork().
+How? In R we can look to align graphics we create using patchwork(). This can also be used
 
 
 #### P - Proximity
