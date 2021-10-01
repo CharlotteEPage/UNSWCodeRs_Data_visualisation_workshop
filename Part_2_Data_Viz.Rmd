@@ -2,5 +2,7 @@
 title: "Part 2 Data Visualisation using R: from basic plot to publication ready, evolving a ggplot()"
 output: html_notebook
 author: C E Page, F Robinson
+editor_options: 
+  chunk_output_type: inline
 ---
 
