@@ -1,12 +1,8 @@
 # UNSWCodeRs_Data_visualisation_workshop
 
 
-**insert coders logo**
-
-
 This repository is for the development and eventual release of code for a data visualisation workshop. Authors: C E Page &amp; F Robinson  
 
-Laste updated: 8/09/21
 
 Contact: c.page@unsw.edu.au, fiona email
 
@@ -28,7 +24,7 @@ a check out these great resources.
 ### Workshop material 
 
 
-All of the data and scripts you need for todays workshop can be found in this repository. To run through the code yourself we reccomend downloading a zip file of this gitrepo **need to add instructions here**. 
+All of the data and scripts you need for todays workshop can be found in this repository. To run through the code yourself we recommend downloading a zip file of this gitrepo.
 
 
 ### Scripts
@@ -37,13 +33,14 @@ All of the data and scripts you need for todays workshop can be found in this re
 This workshop is split into two sections that correspond to the below scripts: 
 
 
-1. Part 1 -  Part 1: giving a CRAP with ggplot()
+1. * Part 1: giving a CRAP with ggplot() (without all code)
+   * FULL Part 1: giving a CRAP with ggplot() (with all code)
 
 
-2. Part 2 - Part 2: from basic plot to publication ready, evolving a ggplot()
+2. Part 2: from basic plot to publication ready, evolving a ggplot()
 
 
-### References 
+
 
 
 

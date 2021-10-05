@@ -9,18 +9,24 @@ editor_options:
 ---
 
 
+
 What do we need to consider when creating visualisations of our data?
+
 
 1. Begin by defining the purpose of your visual(s), and its intended audience.
 
+
 2. Choose appropriate form(s) for the intended purpose and function. **A LITTLE BIT OF THIS**
 
+
 3. Consider how best to visualise the data using design principles (CRAP). **THIS WORKSHOP**
+
 
 
 ***
 # Part 1: giving a CRAP with ggplot 
 ***
+
 
 
 Goals of Part 1:
@@ -45,13 +51,17 @@ library(ggrepel) # for annotations
 library(viridis) # for color blind friendly colours 
 library(RColorBrewer) 
 library(reshape2)
+library(ggsci)
+library(patchwork)
 
 ```
+
 
 
 ***
 ### 1. __ggplot__ 
 ***
+
 
 
 ##### ggplot background
@@ -200,10 +210,8 @@ dev.off()
 ### 2. __CRAP & ggplot__ 
 ***
 
-We can look to use some simple core graphical principles (CRAP - Contrast, Repition, Alignment and Proximity) that when applied to can help visualise data in a beautiful (and meaningful) way! The CRAP principles of design were developed by Robin Williams (REF) and refur to the four basic principles of design that xxxx.
 
-
-**(CP to provide more background here, in addition to links to other useful resources - also add graphic detailing what each of the main words mean)**
+We can look to use some simple core graphical principles (CRAP - Contrast, Repition, Alignment and Proximity) that when applied to can help visualise data in a beautiful (and meaningful) way! The CRAP principles of design were developed by [Robin Williams](https://www.amazon.com.au/Non-Designers-Design-Book-Robin-Williams/dp/0133966151). Perfect for relative beginners in design, Robin developed four easy principles that when applied to data visualisation, can help communicate data in more effective ways. 
 
 
 Some of these principles we can look to directly apply during graphics creation in R, whereas others can be applied during figure creation, or even during production of graphical abstracts. 
@@ -215,34 +223,107 @@ Some of these principles we can look to directly apply during graphics creation 
 If two items are not exactly the same, make them different! Applying contrast can help attract attention to important elements, and groups of elements by making them stand out. 
 
 
-We can look to do this in plots by emphasising group difference with colour and size, in addition to using different font families, and font sizes for plot annotation. We will learn how to specify fonts and font sizes in ggplot theme() in section R - Repetition below. There are many fonts, and font weights (i.e. **bold**, *italic*, light) you can specify in R. 
+_Fonts_
 
-Below is code that creates a plot of some example fonts and font weights you can specify in R:
+
+We can look to do this in plots by emphasising group difference with colour and size, in addition to using different font families, and font sizes for plot annotation. We will learn how to specify fonts and font sizes in ggplot theme() in section R - Repetition below. 
+
+
+There are many fonts, and font weights (i.e. **bold**, *italic*, light) you can specify in R. Fonts have both short names and canonical names you can specify in R. 
+
+
 
 ```{r}
 
+baseplot <- iris_petal_width_to_length_plot + theme_bw() + labs(title = "Iris Petal Length to Width")
+
+baseplot
+
+# Change all text in a figure to times new roman
+
+baseplot + theme(text = element_text(family = "Times New Roman"))
+
+# Change fonts for specific aspects of plot
+
+baseplot +
+  theme(plot.title    = element_text(family = "mono", face = "italic"),
+        plot.subtitle = element_text(family = "sans"),
+        axis.title.x  = element_text(family = "Comic Sans MS"),
+        axis.title.y  = element_text(family = "AppleGothic"),
+        axis.text.x   = element_text(family = "Optima"),
+        axis.text.y   = element_text(family = "Luminari"))
+
+
+
+```
+```{r message = F, warning = FALSE}
+fonttable <- read.table(header=TRUE, sep=",", stringsAsFactors=FALSE,
+                        text='
+Short,Canonical
+mono,Courier
+sans,Helvetica
+serif,Times
+,AvantGarde
+,Bookman
+,Helvetica-Narrow
+,NewCenturySchoolbook
+,Palatino
+,URWGothic
+,URWBookman
+,NimbusMon
+URWHelvetica,NimbusSan
+,NimbusSanCond
+,CenturySch
+,URWPalladio
+URWTimes,NimbusRom
+')
+
+fonttable$pos <- 1:nrow(fonttable)
+
+fonttable <- melt(fonttable, id.vars="pos", measure.vars=c("Short","Canonical"),
+                  variable.name="NameType", value.name="Font")
+
+# Make a table of faces. Make sure factors are ordered correctly
+facetable <- data.frame(Face = factor(c("plain","bold","italic","bold.italic"),
+                                      levels = c("plain","bold","italic","bold.italic")))
+
+fullfonts <- merge(fonttable, facetable)
+
+pf <- ggplot(fullfonts, aes(x=NameType, y=pos)) + 
+             geom_text(aes(label=Font, family=Font, fontface=Face)) +
+             facet_wrap(~ Face, ncol=2)
+
+pf
 ```
 
-```{r}
 
-```
+
+_Colour_
 
 
 Colour is also a powerful tool and can be used to explain levels of data (e.g. through application of a gradient) in addition to simple, and more complex hierachical grouping structures. 
 
-Some great online tools for choose palettes based on colour theory: 
+A online tools for choosing a palettes based on colour theory: 
 
 
-+ adobe colour 
++ [adobe colour](color.adobe.com)  
 
 
-When we think about including colour in our graphics we need to make sure we think about useability and accessability; where we make sure that the palette (range of colours) we choose are not misleading, and are differentiatable for those with varying colourblindness.
+  ![Using a study image to create a palette](Adobe_colour.png)
+  
+  
+
+When we think about including colour in our graphics we need to make sure we think about useability and accessability; where we make sure that the palette (range of colours) we choose are not misleading, and are differentiated for those with varying colourblindness.
+
+ ![Traditional palettes vs....](Colour_blind_perceptually_uniform_colours.png)
+
 
 
 To help deal with problems associated with useability and accessability there are a number of really useful packages developed in R (in addition to a colour blind checker on adobe colour!). These include: 
 
 
   + Greys
+
 
   Sometimes absence of colour can be more powerful in communicating ideas. R has a number of built in grey palettes. 
   
@@ -255,9 +336,13 @@ To help deal with problems associated with useability and accessability there ar
 
 + RColorBrewer palettes
   
+  
   The RColorBrewer package creates great palettes - that can also be filtered to be colourblind friendly.
   
-  The package contains 3 sets of color palette: sequential, qualitative and diverging. Understanding these groupings of    colour can help in choosing how to include colour within your plots.
+  The package contains 3 sets of colour palette: sequential, qualitative and diverging. Understanding these groupings of colour can help in choosing how to include colour within your plots.
+  
+Tip: try and not go over 10 colours max for reliable differentiation
+
   
   1. Sequential - ordered data that progress from low to high.
   
@@ -265,8 +350,13 @@ To help deal with problems associated with useability and accessability there ar
   
   3. Diverging - these put equal emphasis on mid-range and extreme values at both ends of the data range.
   
-  Below are a few useful commands in RColorBrewer:
   
+  ![Using colour to represent data values](Colour_types.png)
+  
+ 
+  Below are a few useful commands using RColorBrewer:
+  
+ 
  
 ```{r}
 # Display all colour palettes 
@@ -277,15 +367,17 @@ display.brewer.all(n = NULL, type = "all", select = NULL, # type = "div","qual",
                    colorblindFriendly = TRUE)
 
 #  Return the hexadecimal color specification 
+
 # brewer.pal(n, name) # where n is the number of colours you want from the palette - minimum is 3!
 
 # Display a single RColorBrewer palette 
 # by specifying its name
+
 # display.brewer.pal(n, name)
 
 ```
-
   Usage in ggplot
+  
   
   
       + scale_fill_brewer() for box plot, bar plot, violin plot, dot plot etc.
@@ -293,8 +385,59 @@ display.brewer.all(n = NULL, type = "all", select = NULL, # type = "div","qual",
       + scale_color_brewer() for lines and points
 
 
-We can also change the size of the elements in a graph - which in itself can present data values.
 
+For those of you who are after a little more help - we can use ggsci(). ggsci offers a collection of color palettes inspired by scientific journals (as well as TV shows and science fiction!) 
+
+https://cran.r-project.org/web/packages/ggsci/vignettes/ggsci.html
+
+
+
+```{r}
+
+# Nature publishing group
+npg <- ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species))+
+  geom_point() +
+  scale_color_npg() +
+  theme_classic()
+npg
+
+# The simpsons
+simpsons <- ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species))+
+  geom_point() +
+  scale_color_simpsons() +
+  theme_classic()
+simpsons
+
+```
+
+
+
+_Size_
+
+
+We can also change the size of the elements in a graph - which in itself can present data values or bring attention to one aspect of a plot. 
+
+
+When a third variable is mapped to the size of points this is called a bubble chart.
+
+```{r}
+
+# Change size of all points
+ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species))+
+  geom_point(size = 0.3) +
+  scale_color_simpsons() +
+  theme_classic()
+
+# Change size of all points
+bubble <- ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species, size = Petal.Length))+
+  geom_point(alpha = 0.5) +
+  scale_size(name = "Petal length") +
+  scale_color_simpsons() +
+  theme_classic()
+
+bubble
+
+```
 
 
 #### R - Repetition 
@@ -302,11 +445,15 @@ We can also change the size of the elements in a graph - which in itself can pre
 
 Repeat things in your design, throughout your design. This helps create a consistent look and feel, where recurring elements can help organise content and establish a sense of unity. 
 
+
 How? There are a number of ways we can bring repetition into our designs in R, namely through the use of themes.  
+
 
 Perfecting plots in ggplot can lead to a lot of lines starting with theme() quickly piling up. Doing this again for the next plot quickly leads to massive scripts with a lot of repetition. Instead, we suggest creating a customised theme for your manuscript/project that combines all of the elements in your theme that you want, and apply it to all of your plots for a project! You can add as many elements to your function as you want (as long as they do not contradict each other).
 
+
 Below we provide an example of a function that makes a theme based off theme_bw(). This function takes no arguments, so is always coded as theme_name().
+
 
 
 ```{r}
@@ -336,27 +483,71 @@ my_plot_theme <- function(){
 # Lets try out this theme with a basic plot 
 # Feel free to play around with some of the specifications below. 
 
-ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species))+
+mytheme <- ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species))+
   geom_point() +
   my_plot_theme()
 
+mytheme
+
 ```
-```
 
-#### A - Alignment 
-
-
-Nothing should be placed randomly on a page. Make sure that every item has some visual connection with something else.  
-
-How? In R we can look to align graphics we create using patchwork(). This can also be used
+See [here](https://ggplot2-book.org/polishing.html) for further pointers on adjusting your own theme. 
 
 
-#### P - Proximity
+Tip: If you do not want to create your own theme, there are a number of pre-specified themes built in to ggplot(). https://www.datanovia.com/en/blog/ggplot-themes-gallery/
 
-Group graphics together that are related. An important benefit here is that grouping graphics can organise information, and clarify concepts. This concept can be applied when using patchwork() to create groups of figures. 
+
+
+#### A - Alignment & P - Proximity
+
+
+Nothing should be placed randomly on a page. Make sure that every item has some visual connection with something else.  An important benefit here is that grouping graphics can organise information, and clarify concepts.
+
 
 Tip: Try and group plots together from the same hypothesis group in your study, or plots that show results from the same method. 
 
 
+In R we can look to align and group graphics we create using patchwork(). 
+
+
+
+```{r}
+
+# Place three plots vertically
+
+baseplot + simpsons +  bubble + plot_layout(ncol =1)
+
+# Change the relative heights of each plot
+
+baseplot + simpsons +  bubble + plot_layout(ncol =1, heights = c(2,1,1))
+
+# Use nested layouts 
+
+bubble +{
+  mytheme + {
+ {
+   simpsons +
+      baseplot +
+      plot_layout(ncol=1)
+  }
+}
+}+
+  plot_layout(ncol=1)
+
+```
+
+
+OR for more intuitive layouts we can use / operator (next to) and | (below)
+
+
+```{r}
+
+(baseplot|simpsons)/(bubble|mytheme)
+
+
+(baseplot/simpsons/mytheme)|(bubble)
+
+```
+https://gotellilab.github.io/GotelliLabMeetingHacks/NickGotelli/ggplotPatchwork.html 
 
 

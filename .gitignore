@@ -3,8 +3,14 @@
 .RData
 .Ruserdata
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 #html files
 *.html
 >>>>>>> e0b03af1d0aaf0e783a4f874d770b1999277404f
+=======
+#html files
+*.html
+
+>>>>>>> b72b5f5e40145bb70bc745249185cdf89394f343

@@ -1,0 +1,122 @@
+---
+title: 'FULL Part 1 Data Visualisation using R: giving a CRAP with ggplot'
+author: "C E Page, F Robinson"
+output:
+  html_document:
+    df_print: paged
+editor_options:
+  chunk_output_type: inline
+---
+
+
+
+What do we need to consider when creating visualisations of our data?
+
+
+1. Begin by defining the purpose of your visual(s), and its intended audience.
+
+
+2. Choose appropriate form(s) for the intended purpose and function. **A LITTLE BIT OF THIS**
+
+
+3. Consider how best to visualise the data using design principles (CRAP). **THIS WORKSHOP**
+
+
+
+***
+# Part 1: giving a CRAP with ggplot 
+***
+
+
+
+Goals of Part 1:
+
+
+1. __ggplot__ - how building a `ggplot` works - step by step.
+
+
+2. __CRAP & ggplot?__ - core graphical principles (CRAP - Contrast, Repition, Alignment and Proximity) that when applied to data in R can help visualise science in a meaningful (and beautiful) way!
+
+
+3. __what plot?__ - choosing what plot is also key to great data visualisation! This deserves a whole tutorial in itself, so today we just point to some of the options you have in R, and resources you can consult for further direction.
+
+
+```{r eval=T, echo=T, message = FALSE}
+# Load libraries 
+# if you need to install these run the code install.packages("package_name")
+
+library(tidyverse)
+library(ggthemes)
+library(ggrepel) # for annotations 
+library(viridis) # for color blind friendly colours 
+library(RColorBrewer) 
+library(reshape2)
+library(ggsci)
+library(patchwork)
+
+```
+
+
+
+***
+### 1. __ggplot__ 
+***
+
+
+
+##### ggplot background
+
+
+`ggplot2` is a graphing R package developed by Hadley Wickham that can be used to create professional looking plots for papers, reports or assignments. 
+
+ggplot is part of the tidyverse and so can be used easily with other tidyverse packages like dplyr and tidyr. 
+
+With ggplot, you can create a variety of plots inclusing, boxplots, scatterplots, histograms, bar graphs and maps. Many extension packages for ggplot also exist which can make it easy to reproduce specialised types of graphs (e.g. survival plots, geographic maps).
+
+
+The gg in `ggplot2` stands for "The Grammar of Graphics" - this is book describing the graphics concept which describes plots by using a specified "grammar".  
+
+
+
+##### ggplot basics
+
+
+A plot can be divided into several fundamental components:
+
+A ggplot can be thought of as building a plot through pulling together basic components. The most basic minimum components for any graph is 1. data 2. specified variables 3. the type of plot. Pretty much what data, which specific data where and how to plot. 
+
+These components can be added in different ways, today we're going to focus on the most basic usage. 
+
+
+1. __data__  a tidy data frame that holds the variables you would like to plot.
+
+2. __aes__ aes specifies which variables to plot (i.e. your x and y variables). aes is where you state the visual properties that get mapped onto values in a data set (colour, size, shape etc.). This inclues specifying the variables to be plotted (x,y).
+
+This code commonly causes confusion when creating ggplots. While aes stands for aesthetics, in ggplot it does not relate to the visual look of the graph but rather what data you want to see in the graph. It specifies what the graph presents rather than how it is presented. 
+
+3. __geom__ corresponds to the type of plot you are trying to make (histogram, box plot, line plot, density plot, dot plot...).
+
+
+
+
+
+
+
+
+
+There are two main functions for creating plots in the ggplot2 package: a `qplot()` and `ggplot()` function: 
+
++ `qplot()` quick plot function easy to use for simple plots
++ `ggplot()` more flexible function that allows you to build a plot piece by piece
+
+
+
+##### Coding a ggplot
+
+
+##### qplot for quick plot
+```{r}
+qplot(data = iris, x = Petal.Width)
+
+qplot(data = iris, x = Petal.Width, y = Petal.Length)
+```
