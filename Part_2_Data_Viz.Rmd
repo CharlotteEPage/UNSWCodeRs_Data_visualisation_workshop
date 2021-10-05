@@ -20,7 +20,7 @@ Goals of Part 2:
 
 
 
-(Note: We will be manipulating the data using functions from tidyverse - including pipes (%>%). These are great for streamlining code. You can find an introduction to using them here .)
+(Note: We will be manipulating the data using functions from tidyverse - including pipes (%>%). These are great for streamlining code. You can find an introduction to using them here https://r4ds.had.co.nz/pipes.html.)
 
 
 ![Evolution of a ggplot](ggplot_evolution.png)
@@ -112,10 +112,11 @@ lter <- read.csv("lter.csv")
 niwot_plant_exp <- read.csv("niwot_plant_exp.csv")
 ```
 
-This dataset is from a fertilisation experiment at Niwot Ridge LTER site. There are multiple plots per fertilisation treatment, and species occurence in each plot was monitoried over several years. 
+This dataset is from a fertilisation experiment at Niwot Ridge LTER site. There are multiple plots per fertiliser treatment, and species occurrence in each plot was monitored over several years. 
 
-In this workshop we are going to produce a raincloud plot that compare species richness amongst fertiliser treatments over time.
+In this workshop we are going to produce a rain cloud plot that compare species richness among fertiliser treatments over time.
 
+__Data__ 
 
 b.  First of all we need to calculate species richness: 
 ```{r}
