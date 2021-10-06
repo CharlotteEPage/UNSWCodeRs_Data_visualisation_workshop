@@ -41,6 +41,7 @@ Goals of Part 1:
 3. __what plot?__ - choosing what plot is also key to great data visualisation! This deserves a whole tutorial in itself, so today we just point to some of the options you have in R, and resources you can consult for further direction.
 
 
+
 ```{r eval=T, echo=T, message = FALSE}
 # Load libraries 
 # if you need to install these run the code install.packages("package_name")
