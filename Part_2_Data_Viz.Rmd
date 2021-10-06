@@ -24,6 +24,7 @@ Goals of Part 2:
 (Note: We will be manipulating the data using functions from tidyverse - including pipes (%>%). These are great for streamlining code. You can find an introduction to using them here https://r4ds.had.co.nz/pipes.html.)
 
 
+
 ![Evolution of a ggplot](ggplot_evolution.png)
 
 
@@ -92,7 +93,11 @@ Developed to overcome issues associated with masking distributions of data when 
 __Data__ 
 
 
-The data we will be visualising is publicly available from the LTER Data Portal https://portal.lternet.edu/nis/home.jsp and comprise the coordinates of LTER sites and plant observations from an experiment at Niwot Ridge LTER.
+The data we will be visualising is publicly available from the LTER Data Portal https://portal.lternet.edu/nis/home.jsp and comprise of plant observations from an experiment at Niwot Ridge LTER.
+
+This dataset is from a fertilisation experiment at Niwot Ridge LTER site. There are multiple plots per fertiliser treatment, and species occurrence in each plot was monitored over several years. 
+
+In this workshop we are going to produce a rain cloud plot that compare species richness among fertiliser treatments over time.
 
 
 a. Loading the data 
@@ -103,9 +108,7 @@ a. Loading the data
 niwot_plant_exp <- read.csv("niwot_plant_exp.csv")
 ```
 
-This dataset is from a fertilisation experiment at Niwot Ridge LTER site. There are multiple plots per fertiliser treatment, and species occurrence in each plot was monitored over several years. 
 
-In this workshop we are going to produce a rain cloud plot that compare species richness among fertiliser treatments over time.
 
 
 b.  First of all we need to calculate species richness: 
@@ -164,6 +167,7 @@ my_plot_theme <- function(){
 ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species))+
   geom_point() +
   my_plot_theme()
+
 ```
 
 ```{r}
@@ -218,7 +222,7 @@ ggdist::stat_halfeye(
     position = position_jitter(
       seed = 1, width = .1
     )) +
-  #coord_cartesian(xlim = c(1.2, NA), clip = "off") + 
+    # coord_cartesian(xlim = c(1.2, NA), clip = "off") + 
       # \n adds a new line which creates some space between the axis and axis title
     labs(y = "Species richness\n", x = NULL) +
     # Removing legends
