@@ -9,46 +9,54 @@ editor_options:
 ---
 
 
+***
 
-What do we need to consider when creating visualisations of our data?
+***
+
+***
+
+**What do we need to consider when creating visualisations of our data?**
 
 
 1. Begin by defining the purpose of your visual(s), and its intended audience.
 
 
-2. Choose appropriate form(s) for the intended purpose and function. **A LITTLE BIT OF THIS**
+2. Choose appropriate form(s) for the intended purpose and function. *A LITTLE BIT OF THIS*
 
 
-3. Consider how best to visualise the data using design principles (CRAP). **THIS WORKSHOP**
+3. Consider how best to visualise the data using design principles (CRAP). *THIS WORKSHOP*
 
 
 
 ***
-# Part 1: giving a CRAP with ggplot 
+# Part 1: basics of ggplot 
 ***
 
 
 
-Goals of Part 1:
+Aims of Part 1:
 
 
-1. __ggplot__ - how building a `ggplot` works - step by step.
+1. __ggplot__ - how building a `ggplot` works step by step.
 
 
 2. __CRAP & ggplot?__ - core graphical principles (CRAP - Contrast, Repition, Alignment and Proximity) that when applied to data in R can help visualise science in a meaningful (and beautiful) way!
 
 
 
+***
+Start by loading your libraries:
+
 ```{r eval=T, echo=T, message = FALSE}
 
 # Load libraries 
 # if you need to install these run the code install.packages("package_name")
 
-library(tidyverse)
+library(tidyverse) #includes ggplot2
 library(ggthemes)
 library(ggrepel) # for annotations 
 library(viridis) # for color blind friendly colours 
-library(RColorBrewer) 
+library(RColorBrewer) # gives nice colour palettes for different types of data i.e. continuous vs discrete
 library(reshape2)
 library(ggsci)
 library(patchwork)
@@ -58,7 +66,7 @@ library(patchwork)
 
 
 ***
-### 1. __ggplot__ 
+### 1. __ggplot2__ 
 ***
 
 
@@ -68,40 +76,41 @@ library(patchwork)
 
 `ggplot2` is a graphing R package developed by Hadley Wickham that can be used to create professional looking plots for papers, reports or assignments. 
 
-ggplot is part of the tidyverse and so can be used easily with other tidyverse packages like dplyr and tidyr. 
+`ggplot2` is part of the tidyverse and so can be used easily with other tidyverse packages like dplyr and tidyr. 
 
-With ggplot, you can create a variety of plots inclusing, boxplots, scatterplots, histograms, bar graphs and maps. Many extension packages for ggplot also exist which can make it easy to reproduce specialised types of graphs (e.g. survival plots, geographic maps).
+With `ggplot2`, you can create a variety of plots including, boxplots, scatterplots, histograms, bar graphs and maps. Many extension packages for `ggplot2` also exist which can make it easy to reproduce specialised types of graphs (e.g. survival plots, geographic maps).
 
 
 The gg in `ggplot2` stands for "The Grammar of Graphics" - this is book describing the graphics concept which describes plots by using a specified "grammar".  
+
+***
 
 
 
 ##### ggplot basics
 
+A ggplot can be thought of as building a plot through pulling together basic components. The most basic minimum components for any graph is the data, specified variables and the type of plot.
 
-A plot can be divided into several fundamental components:
-
-A ggplot can be thought of as building a plot through pulling together basic components. The most basic minimum components for any graph is 1. data 2. specified variables 3. the type of plot. Pretty much what data, which specific data where and how to plot. 
-
-These components can be added in different ways, today we're going to focus on the most basic usage. 
+These components can be added in different ways to create the desired plot output. You could add multiple components of one type to the plot or add every different type of component - whatever you need to communicate your story best.
 
 
-1. __data__  a tidy data frame that holds the variables you would like to plot.
+Today we're going to focus the basic building blocks and show some examples of how it can look once you pull a number of components together. 
 
-2. __aes__ aes specifies which variables to plot (i.e. your x and y variables). aes is where you state the visual properties that get mapped onto values in a data set (colour, size, shape etc.). This inclues specifying the variables to be plotted (x,y).
+The fundamental components in ggplot language:
 
-This code commonly causes confusion when creating ggplots. While aes stands for aesthetics, in ggplot it does not relate to the visual look of the graph but rather what data you want to see in the graph. It specifies what the graph presents rather than how it is presented. 
+__1. data__  a tidy data frame that holds the variables you would like to plot.
 
-3. __geom__ corresponds to the type of plot you are trying to make (histogram, box plot, line plot, density plot, dot plot...).
+__2. aes__ aes specifies which variables to plot (i.e. your x and y variables). aes is where you state the visual properties that get mapped onto values in a data set (colour, size, shape etc.). This inclues specifying the variables to be plotted (x,y). aes can cause confusion when creating ggplots. While aes stands for aesthetics, in ggplot it does not relate to the visual look of the graph but rather what data you want to see in the graph. It specifies what the graph presents rather than how it is presented. 
 
-
-
-
+__3. geom__ corresponds to the type of plot you are trying to make (histogram, box plot, line plot, density plot, dot plot...).
 
 
+***
 
 
+### Hey Charlotte - lets review qplot and how we're going for time if it should be cut out
+
+##### Coding a ggplot
 
 There are two main functions for creating plots in the ggplot2 package: a `qplot()` and `ggplot()` function: 
 
@@ -109,11 +118,30 @@ There are two main functions for creating plots in the ggplot2 package: a `qplot
 + `ggplot()` more flexible function that allows you to build a plot piece by piece
 
 
+##### check data first
+Today we'll be using the 'iris' data which is freely available and can be accesssed directly from R.
 
-##### Coding a ggplot
+```{r}
+data("iris")
+```
+
+Before you plot your data, it's always a good idea to look at the type of data you have. 
+
+Is your data continuous? Is it categorical? 
+
+Sometimes when you read your data into R, it may suprise you that what you thought would be numerical has been read in as categorical. This can cause problems when you're trying to plot so its always worth checking beforehand and changing the class of your variables. 
+```{r}
+#confirm the class of the variables
+str(iris)
+```
+In iris, we have 4 numerical variables and 1 factoral variable. These are the expected types for what we want to plot so we can proceed.
+
+
 
 
 ##### qplot for quick plot
+A 'quick' plot is for when you're just wanting to plot something to get an idea of the shape of the data. For example, I may use a qplot when I'm wanting to check if my data is normally distributed (or not).
+
 ```{r}
 qplot(data = iris, x = Petal.Width)
 
@@ -121,12 +149,8 @@ qplot(data = iris, x = Petal.Width, y = Petal.Length)
 ```
 
 
-##### ggplot
+##### ggplot for when you're wanting to be intentional with plotting
 ```{r}
-data("iris")
-str(iris)
-#confirm the class of the variables
-
 #component 1 data
 ggplot(data = iris)
 
@@ -137,24 +161,43 @@ ggplot(iris, aes(x = Petal.Width, y = Petal.Length))
 ggplot(data = iris, aes(x = Petal.Width, y = Petal.Length)) + geom_point()
 
 
-
-
 ```
 
 
-Remember those open and closed brackets after geom_point(). Without those, nothing will happen
+Remember those open and closed brackets after geom_point(). Without those, nothing will happen.
 
+***
 
-The type of graph you want to make has to match the classes of the inputs. For example, a scatterplot would require both variables to be numeric. Or a boxplot would require the x variable to be a factor and the y variable to be numeric. You can check the class of any variable with the class function, or all variables in a data frame with the str function.
-
+The type of graph you want to make has to match the classes of the inputs. You can check the class of any variable with the class function, or all variables in a data frame with the str function.
 
 ```{r}
 
 ggplot(iris, aes(Species, Petal.Width)) + geom_boxplot()
 
-ggplot(iris, aes(Petal.Length, Petal.Width)) + geom_boxplot()
+ggplot(iris, aes(Petal.Width, Species)) + geom_point()
 
-ggplot(iris, aes(Petal.Width)) + geom_boxplot()
+ggplot(iris, aes(Petal.Length, Petal.Width)) + geom_boxplot() # throws a warning because it knows something isnt right
+
+ggplot(iris, aes(x = Species, y = Petal.Width)) + geom_boxplot() # much happier
+
+```
+
+
+##### aes options
+aes defines the x and y variable of a plot. It also can define other variables within the plot including how you want to group variables.
+
+Other key aes options include fill and colour.
+
+Colour is used to define a variable you want to group together and distinguish through colour in the plot. 
+
+
+```{r}
+
+ggplot(data = iris, aes(x = Petal.Width, y = Petal.Length, colour = Species)) + geom_point()
+
+ggplot(data = iris, aes(x = Petal.Width, colour = Species)) + geom_histogram()
+
+ggplot(data = iris, aes(x = Petal.Width, fill = Species)) + geom_histogram()
 
 ```
 
@@ -164,32 +207,68 @@ ggplot(iris, aes(Petal.Width)) + geom_boxplot()
 ##### Assign plots and print them
 
 
-A helpful practise when making ggplots is to assign the plot you’ve made to an object (e.g., plot1 in the code above) and then ‘print’ it separately. As your ggplot becomes more complicated this will make it much easier.
+A helpful practice when making ggplots is to assign the plot you’ve made to an object (e.g., plot1 in the code above) and then ‘print’ it separately. As your ggplot becomes more complicated this will make it much easier.
 
 
 Plots can be saved as a variable using <- assign, and printed at any time by calling the variable. 
-
-
 ```{r}
-iris_petal_width_to_length_plot <- ggplot(data = iris, aes(x = Petal.Width, y = Petal.Length)) + geom_point()
+iris_petal_width_to_length_plot <- ggplot(data = iris, aes(x = Petal.Width, y = Petal.Length, colour = Species)) + geom_point()
 
-iris_petal_width_to_length_plot + theme_bw() + labs(title = "Iris Petal Length to Width")
+iris_petal_width_to_length_plot
+
+iris_petal_width_to_length_plot + labs(title = "Iris Petal Length to Width") + theme_bw() 
 
 
 ```
 
 
 
-##### Other components: 
+##### Other key components: 
 
 
-4. __theme__ a theme is a set of visual parameters that controls the background, borders, text, legend position etc. You can use predefined themes or create your own (see below!).
+__4. theme__ a theme is a set of visual parameters that controls the background, borders, text, legend position etc. You can use predefined themes or create your own (see below!).
+
+
+```{r}
+
+iris_petal_width_to_length_plot + theme_classic()
+
+```
+
+
+```{r}
+mytheme3 <- theme(legend.text = element_text(face = "italic",colour="gray20",
+                                            family = "Helvetica", size = rel(1)), 
+                 axis.title = element_text(colour="gray20",family = "Helvetica",
+                                           size = rel(1.2)), 
+                 axis.text = element_text(family = "Helvetica",colour = "gray61",
+                                          size = rel(1.2)), 
+                 axis.line = element_blank(),
+                 axis.ticks = element_line(colour="grey",size = rel(0.8)),
+                 panel.grid.major = element_line(colour="grey",size = rel(0.5)), 
+                 panel.grid.minor = element_blank(), 
+                 panel.background = element_rect(fill = "whitesmoke"), 
+                 legend.key = element_rect(fill = "whitesmoke"), 
+                 legend.title = element_text(colour = "gray20",size = rel(1.2),
+                                             family = "Helvetica"), 
+                 plot.title = element_text(colour = "gray20", face = "bold",
+                                           size = rel(1.8),family = "Helvetica"))
+
+iris_petal_width_to_length_plot + mytheme3
+
+```
 
 
 
 
+__5. stat__ a stat layer applies some kind of statistical transformation to the data. For example `stat_smooth(method = "lm")` displays a linear regression line with confidence intervals.
 
-5. __stat__ a stat layer applies some kind of statistical transformation to the data. For example `stat_smooth(method = "lm")` displays a linear regression line with confidence intervals.
+
+```{r}
+
+iris_petal_width_to_length_plot + mytheme3 +stat_smooth(method = "lm")
+
+```
 
 
 
@@ -198,9 +277,16 @@ After creating a plot use `ggsave` to save a plot in the current working directo
 
 save your plot
 ```{r}
-pdf()
+dir.create("plots/")
 
+pdf("plots/iris_petal_width_to_length_plot.pdf")
+iris_petal_width_to_length_plot + mytheme3 + stat_smooth(method = "lm")
 dev.off()
+```
+
+Alternatively
+```{r}
+ggsave("plots/iris_petal_width_to_length_plot.pdf", )
 ```
 
 
