@@ -43,13 +43,12 @@ Aims of Part 1:
 2. __CRAP & ggplot?__ - core graphical principles (CRAP - Contrast, Repition, Alignment and Proximity) that when applied to data in R can help visualise science in a meaningful (and beautiful) way!
 
 
-3. __what plot?__ - choosing what plot is also key to great data visualisation! This deserves a whole tutorial in itself, so today we just point to some of the options you have in R, and resources you can consult for further direction.
-
 
 ***
 Start by loading your libraries:
 
 ```{r eval=T, echo=T, message = FALSE}
+
 # Load libraries 
 # if you need to install these run the code install.packages("package_name")
 
