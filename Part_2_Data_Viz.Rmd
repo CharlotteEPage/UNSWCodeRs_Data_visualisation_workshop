@@ -1,6 +1,6 @@
 ---
 title: 'Part 2 Data Visualisation using R: from basic plot to publication ready, evolving
-  a ggplot()'
+  a ggplot'
 author: "C E Page, F Robinson"
 output:
   html_document:
@@ -10,10 +10,16 @@ editor_options:
 ---
 
 
-Today we are going to focus on how we can move plots along from a quick exploration of data - to a plot that clearly presents your data and illustrates your findings. We will do this by working through an example where we will make a plot type called a raincloud plot.
+***
+
+***
+
+***
+
+For the second half of this workshop we are going to focus on how we can move plots along from a quick exploration of data - to a plot that clearly presents your data and illustrates your findings. We will do this by working through an example where we will make a plot type called a raincloud plot.
 
 
-Goals of Part 2: 
+Aims of Part 2: 
 
 
 1. Evolve a plot from basic visualisation to a raincloud plot!
@@ -26,6 +32,7 @@ Goals of Part 2:
 
 
 ![Evolution of a ggplot](ggplot_evolution.png)
+
 
 
 ```{r}
@@ -100,12 +107,15 @@ This dataset is from a fertilisation experiment at Niwot Ridge LTER site. There 
 In this workshop we are going to produce a rain cloud plot that compare species richness among fertiliser treatments over time.
 
 
+
 a. Loading the data 
 ```{r}
 # Load data - plant records from the Long Term Ecological Research # Network 
 # Niwot Ridge site
 
 niwot_plant_exp <- read.csv("niwot_plant_exp.csv")
+
+View(niwot_plant_exp)
 ```
 
 
@@ -121,6 +131,8 @@ niwot_richness <- niwot_plant_exp %>% group_by(plot_num, year) %>%
 ```
 
 
+
+
 c. Now we can visualise how species richness varies across fertilisation treatments.
 ```{r}
 
@@ -133,8 +145,10 @@ distributions1
 
 ```
 
-d. A useful first look at the data distributions! Can we bring in some colour, and add our theme so that the plot is more clear.
 
+
+
+d. A useful first look at the data distributions! Can we bring in some colour, and add our theme so that the plot is more clear.
 
 First specify the theme for your plot.
 ```{r}
@@ -180,7 +194,9 @@ distributions2
 ```
 
 
-e. How about some summary statistics so we can begin to investigate differences between groups?
+
+
+e. How about some summary visualisations so we can begin to investigate differences between groups?
 
 
 ```{r}
@@ -202,6 +218,7 @@ Note: make sure you have ggdist() loaded to add half violin plot.
 
 ```{r}
 
+
 distributions5 <- ggplot(niwot_richness, aes(x = fert, y = richness, fill = fert)) +
 ggdist::stat_halfeye(
     adjust = .5, # Custom width
@@ -222,11 +239,9 @@ ggdist::stat_halfeye(
     position = position_jitter(
       seed = 1, width = .1
     )) +
-    # coord_cartesian(xlim = c(1.2, NA), clip = "off") + 
-      # \n adds a new line which creates some space between the axis and axis title
     labs(y = "Species richness\n", x = NULL) +
     # Removing legends
-    #guides(fill = FALSE, color = FALSE) +
+    guides(fill = FALSE, color = FALSE) +
     # Setting the limits of the y axis
     scale_y_continuous(limits = c(0, 30)) +
     # Picking nicer colours
@@ -240,8 +255,9 @@ distributions5
 ```
 
 
-g. Finally, for a full rain cloud plot, we can flip the axis. 
 
+
+g. Finally, for a full rain cloud plot, we can flip the axis. 
 
 ```{r}
 
@@ -256,8 +272,9 @@ ggsave(distributions6, filename = "distributions6.png", height = 5, width = 5)
 ```
 
 
-h. We now welcome you to have a play around with this data set, see whether you can group treatments and present this data using some of what you have learned today!
 
+
+h. We now welcome you to have a play around with this data set, see whether you can group treatments and present this data using some of what you have learned today!
 
 ```{r eval=F, echo=T}
 
