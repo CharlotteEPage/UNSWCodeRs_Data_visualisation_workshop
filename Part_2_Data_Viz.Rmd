@@ -84,6 +84,9 @@ https://wellcomeopenresearch.org/articles/4-63/v1) and have since received a lot
 [Twitter thread link](https://twitter.com/CedScherer/status/1375438100298674179?ref_src=twsrc%5Etfw%7Ctwcamp%5Etweetembed%7Ctwterm%5E1375438100298674179%7Ctwgr%5E%7Ctwcon%5Es1_&ref_url=https%3A%2F%2Fwww.cedricscherer.com%2F2021%2F06%2F06%2Fvisualizing-distributions-with-raincloud-plots-with-ggplot2%2F)
 
 
+Developed to overcome issues associated with masking distributions of data when plotting columns with error-bars. Rain cloud plots allow visualisation of the raw data, distribution of the data as density and key summary statistics all at the same time. 
+
+
 A raincloud plot is three plot types in one: 
 
 
@@ -93,8 +96,6 @@ A raincloud plot is three plot types in one:
 
 3. __Scatter plot__
 
-
-Developed to overcome issues associated with masking distributions of data when plotting columns with error-bars. Rain cloud plots allow visualisation of the raw data, distribution of the data as density and key summary statistics all at the same time. 
 
 
 __Data__ 

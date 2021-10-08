@@ -293,8 +293,10 @@ ggsave("plots/iris_petal_width_to_length_plot.pdf", )
 ### 2. __CRAP & ggplot__ 
 ***
 
+Now that we have an idea of how to use ggplot, we can now learn about some simple core graphical principles (CRAP - Contrast, Repition, Alignment and Proximity) that when applied to our plotting can help visualise data in a beautiful (and meaningful) way! The CRAP principles of design were developed by designer [Robin Williams](https://www.amazon.com.au/Non-Designers-Design-Book-Robin-Williams/dp/0133966151).
+for non-designers!
 
-We can look to use some simple core graphical principles (CRAP - Contrast, Repition, Alignment and Proximity) that when applied to our plotting can help visualise data in a beautiful (and meaningful) way! The CRAP principles of design were developed by [Robin Williams](https://www.amazon.com.au/Non-Designers-Design-Book-Robin-Williams/dp/0133966151). Perfect for relative beginners in design, Robin developed four easy principles that when applied can help unify projects through clarifying concepts and relationships between elements, enhancing design and ultimately communicate data in more effective ways. 
+Perfect for relative beginners in design these four easy principles that when applied can help unify projects through clarifying concepts and relationships between elements, enhancing design and ultimately communicate data in more effective ways. 
 
 
 Some of these principles we can look to directly apply during graphics creation in R, whereas others can be applied during figure creation, or even during production of graphical abstracts. 
@@ -326,6 +328,7 @@ If you want to go all out on using custom fonts - we suggest looking into [extra
 
 How can we change fonts in ggplot? The easiest way to do this is through editing the theme() and use element_text to change the family and face of font. You can do this for the whole plot, or for specific elements of the plot. (Note for text options on plots you can also use geom_text()!)
 
+
 ```{r}
 
 # First lets make a basic plot 
@@ -335,7 +338,8 @@ baseplot
 
 # Change all text in a figure to times new roman
 
-baseplot + theme(text = element_text(family = "Times New Roman"))
+baseplot + 
+  theme(text = element_text(family = "Times New Roman", face = "bold"))
 
 # Change fonts for specific aspects of plot
 
@@ -353,6 +357,7 @@ Lets have a look at some of the font options that are available without having t
 
 
 The table generated below shows you some of these font types available to you in R - this might throw up some warnings, the advice here is that the basic fonts (at the bottom) of the table work - others can be a little more tricky.
+
 ```{r message = F, warning = FALSE}
 fonttable <- read.table(header=TRUE, sep=",", stringsAsFactors=FALSE,
                         text='
@@ -394,13 +399,12 @@ pf
 ```
 
 
-
 _Colour_
 
 
 We all want to use colour in our plots and it is no surprise that it can be key to producing clear and beautiful graphics. 
 
-Colour is also a powerful tool that can be used to explain levels of datain addition to simple, and more complex hierachical grouping structures. 
+Colour is also a powerful tool that can be used to explain levels of data in addition to simple, and more complex hierachical grouping structures. 
 
 So how do we go about choosing colour(s) for our visualisations?
 
@@ -408,15 +412,16 @@ So how do we go about choosing colour(s) for our visualisations?
 There are a number of things we need to consider: 
 
 
-* Data types and structure: colour choice will be inherently related to your graphics and the type of plot you are creating. For example, would you like colour to help differentiate between groupings (for example different levels of a treatment), or would you like colour to convey data itself through use of a gradient? 
+* Data types,structure and aim: colour choice will be inherently related to your graphics and the type of plot you are creating. For example, would you like colour to help differentiate between groupings (for example different levels of a treatment), or would you like colour to convey data itself through use of a gradient? 
 
 * Useability and accessibility: When we think about including colour in our graphics we need to make sure we think about useability and accessability; where we make sure that the palette (range of colours) we choose are not misleading, and are differentiated for those with varying colourblindness.
 
 
- ![Traditional palettes vs....](Colour_blind_perceptually_uniform_colours.png)
+![Traditional palettes vs....](Colour_blind_perceptually_uniform_colours.png)
 
 
-Data types and structure: 
+Data types and structure can inform the type of palette we might look to use:
+
 
   1. Sequential - ordered data that progress from low to high.
   
@@ -432,7 +437,6 @@ Data types and structure:
 
 Tip: try and not go over 10 colours max for reliable differentiation. If you need more than 10 colours, try changing the hue, opacicity and lightness of pairs of colours.
 
-How to change and choose colours for our ggplots()?
 
 There are several ways (and endless online material) that can help you choose and specify colour in ggplot. 
 
@@ -476,7 +480,7 @@ To help deal with problems associated with useability and accessability there ar
         
 + RColorBrewer palettes
   
-  The RColorBrewer package creates great palettes that can also be filtered to be colourblind friendly.The package contains 3 sets of colour palette: sequential, qualitative and diverging. Understanding these groupings of colour can help in choosing how to include colour within your plots.
+  The RColorBrewer package great palettes that can also be filtered to be colourblind friendly.The package contains 3 sets of colour palette: sequential, qualitative and diverging. 
   
   Usage in ggplot: 
     
@@ -505,7 +509,6 @@ display.brewer.pal(n = 10, "Paired")
 brewer.pal(n = 10, "Paired") # where n is the number of colours you want from the palette - minimum is 3!
 
 
-
 ```
   
   
@@ -531,9 +534,7 @@ simpsons <- ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species))+
 simpsons
 
 ```
-
 _Size_
-
 
 We can also change the size of the elements in a graph which in itself can present data values or bring attention to one aspect of a plot. 
 
@@ -573,7 +574,7 @@ How? There are a number of ways we can bring repetition into our designs in R, n
 Perfecting plots in ggplot can lead to a lot of lines starting with theme() quickly piling up. Doing this again for the next plot quickly leads to massive scripts with a lot of repetition. Instead, we suggest creating a customised theme for your manuscript/project that combines all of the elements in your theme that you want, and apply it to all of your plots for a project! 
 
 
-There are multiple ways to make your own themes and specify them in ggplots. Earlier fiona demonstrated how this can be done through assigning a theme to an object.
+There are multiple ways to make your own themes and specify them in ggplots. Earlier Fiona demonstrated how this can be done through assigning a theme to an object.
 
 
 Below we provide an example of a function that makes a theme based off theme_bw(). This function takes no arguments, so is always coded as theme_name().You can add as many elements to your function as you want (as long as they do not contradict each other). Don't worry - this is probably one of the easiest themes you will ever write, and it allows you to build off pre-existing themes (so half the work is already done!).
@@ -659,7 +660,6 @@ bubble +{
   plot_layout(ncol=1)
 
 ```
-
 
 OR for more intuitive layouts we can use / operator (next to) and | (below)
 
