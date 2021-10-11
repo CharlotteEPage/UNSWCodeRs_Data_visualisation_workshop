@@ -40,26 +40,8 @@ Aims of Part 1:
 1. __ggplot__ - how building a `ggplot` works step by step.
 
 
-2. __CRAP & ggplot?__ - core graphical principles (CRAP - Contrast, Repition, Alignment and Proximity) that when applied to data in R can help visualise data in a meaningful (and beautiful) way!
+2. __CRAP & ggplot?__ - core graphical principles (CRAP - Contrast, Repetition, Alignment and Proximity) that when applied to data in R can help visualise data in a meaningful (and beautiful) way!
 
-
-
-***
-Start by loading your libraries:
-
-```{r eval=T, echo=T, message = FALSE}
-
-# Load libraries 
-# if you need to install these run the code install.packages("package_name")
-
-library(tidyverse) #includes ggplot2
-library(ggrepel) # for annotations 
-library(viridis) # for color blind friendly colours 
-library(RColorBrewer) # gives nice colour palettes for different types of data i.e. continuous vs discrete
-library(ggsci) # interesting set of colour palettes
-library(patchwork) # for placing plots next to each other
-
-```
 
 
 
@@ -74,12 +56,15 @@ library(patchwork) # for placing plots next to each other
 
 `ggplot2` is a graphing R package developed by Hadley Wickham that can be used to create professional looking plots for papers, reports or assignments. 
 
+The gg in `ggplot2` stands for "The Grammar of Graphics" - this is book describing the graphics concept which describes plots by using a specified "grammar".  
+
 `ggplot2` is part of the tidyverse and so can be used easily with other tidyverse packages like dplyr and tidyr. 
 
 With `ggplot2`, you can create a variety of plots including, boxplots, scatterplots, histograms, bar graphs and maps. Many extension packages for `ggplot2` also exist which can make it easy to reproduce specialised types of graphs (e.g. survival plots, geographic maps).
 
+***
 
-The gg in `ggplot2` stands for "The Grammar of Graphics" - this is book describing the graphics concept which describes plots by using a specified "grammar".  
+
 
 ***
 
@@ -101,6 +86,26 @@ __1. data__  a tidy data frame that holds the variables you would like to plot.
 __2. aes__ aes specifies which variables to plot (i.e. your x and y variables). aes is where you state the visual properties that get mapped onto values in a data set (colour, size, shape etc.). This inclues specifying the variables to be plotted (x,y). aes can cause confusion when creating ggplots. While aes stands for aesthetics, in ggplot it does not relate to the visual look of the graph but rather what data you want to see in the graph. It specifies what the graph presents rather than how it is presented. 
 
 __3. geom__ corresponds to the type of plot you are trying to make (histogram, box plot, line plot, density plot, dot plot...).
+
+***
+
+
+Start by loading your libraries:
+
+```{r eval=T, echo=T, message = FALSE}
+
+# Load libraries 
+# if you need to install these run the code install.packages("package_name")
+
+library(tidyverse) #includes ggplot2
+#library(ggplot2)
+library(ggrepel) # for annotations 
+library(viridis) # for color blind friendly colours 
+library(RColorBrewer) # gives nice colour palettes for different types of data i.e. continuous vs discrete
+library(ggsci) # interesting set of colour palettes
+library(patchwork) # for placing plots next to each other
+
+```
 
 
 ***
@@ -145,6 +150,8 @@ qplot(data = iris, x = Petal.Width, y = Petal.Length)
 ```
 
 
+
+
 ##### ggplot for when you're wanting to be intentional with plotting
 ```{r}
 #component 1 data
@@ -154,14 +161,16 @@ ggplot(data = iris)
 ggplot(iris, aes(x = Petal.Width, y = Petal.Length))
 
 #component 3 variable
-ggplot(data = iris, aes(x = Petal.Width, y = Petal.Length)) + geom_point()
+ggplot(data = iris, aes(x = Petal.Width, y = Petal.Length)) + geom_histogram()
 
 
 ```
 
-
+other plots
 ```{r}
-ggplot(iris, aes(Petal.Width, Petal.Length)) +geom_histogram()
+ggplot(iris, aes(Petal.Width)) +geom_histogram()
+
+ggplot(iris, aes(Petal.Width, Species)) +geom_boxplot()
 
 ```
  
@@ -207,8 +216,6 @@ iris_petal_width_to_length_plot <- ggplot(data = iris, aes(x = Petal.Width, y = 
 
 iris_petal_width_to_length_plot
 
-iris_petal_width_to_length_plot + labs(title = "Iris Petal Length to Width") + theme_bw() 
-
 
 ```
 
@@ -222,7 +229,7 @@ __4. theme__ a theme is a set of visual parameters that controls the background,
 
 ```{r}
 
-iris_petal_width_to_length_plot + theme_classic()
+iris_petal_width_to_length_plot + theme_bw()
 
 ```
 
@@ -263,16 +270,26 @@ __5. stat__ a stat layer applies some kind of statistical transformation to the 
 
 ```{r}
 
-iris_petal_width_to_length_plot + mytheme3 +stat_smooth(method = "lm")
+iris_petal_width_to_length_plot + mytheme3 + stat_smooth(method = "lm")
 
 ```
+
+
+
+__6. labs__ stands for labels
+
+```{r}
+iris_petal_width_to_length_plot + mytheme3 + stat_smooth(method = "lm") + labs(title = "Iris Petal Width compared to length", x = "Petal Width (cm)", y = "Petal Length (cm)")
+
+```
+
+
 
 
 
 After creating a plot use `ggsave` to save a plot in the current working directory. 
 
 Alternatively you could use the pdf function. 
-
 
 
 save your plot
@@ -286,8 +303,13 @@ dev.off()
 
 Alternatively
 ```{r}
-ggsave("plots/iris_petal_width_to_length_plot.pdf", )
+ggsave("plots/my_iris_plot2.png")
 ```
+
+
+
+
+
 
 
 
