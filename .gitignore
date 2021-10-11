@@ -14,4 +14,6 @@
 *.html
 *.pdf
 
+*Part_1_Data_Viz_fiona.Rmd
+
 >>>>>>> b72b5f5e40145bb70bc745249185cdf89394f343
