@@ -124,6 +124,7 @@ Today we'll be using the 'iris' data which is freely available and can be access
 
 ```{r}
 
+
 ```
 
 Before you plot your data, it's always a good idea to look at the type of data you have. 
@@ -133,6 +134,8 @@ Is your data continuous? Is it categorical?
 Sometimes when you read your data into R, it may suprise you that what you thought would be numerical has been read in as categorical. This can cause problems when you're trying to plot so its always worth checking beforehand and changing the class of your variables. 
 ```{r}
 #confirm the class of the variables
+
+
 
 ```
 In iris, we have 4 numerical variables and 1 factoral variable. These are the expected types for what we want to plot so we can proceed.
@@ -234,8 +237,6 @@ mytheme3 <- theme(legend.text = element_text(face = "italic",colour="gray20",
                                              family = "Helvetica"), 
                  plot.title = element_text(colour = "gray20", face = "bold",
                                            size = rel(1.8),family = "Helvetica"))
-
-
 
 ```
 
