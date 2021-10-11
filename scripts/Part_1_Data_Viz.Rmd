@@ -53,7 +53,8 @@ Start by loading your libraries:
 # if you need to install these run the code install.packages("package_name")
 
 library(tidyverse) #includes ggplot2
-library(ggplot2)
+
+
 library(ggthemes) 
 library(ggrepel) # for annotations 
 library(viridis) # for color blind friendly colours 
@@ -121,9 +122,7 @@ There are two main functions for creating plots in the ggplot2 package: a `qplot
 Today we'll be using the 'iris' data which is freely available and can be accesssed directly from R.
 
 ```{r}
-
 data("iris")
-
 ```
 
 Before you plot your data, it's always a good idea to look at the type of data you have. 
@@ -134,8 +133,6 @@ Sometimes when you read your data into R, it may suprise you that what you thoug
 ```{r}
 #confirm the class of the variables
 str(iris)
-
-
 ```
 In iris, we have 4 numerical variables and 1 factoral variable. These are the expected types for what we want to plot so we can proceed.
 
@@ -146,28 +143,39 @@ In iris, we have 4 numerical variables and 1 factoral variable. These are the ex
 A 'quick' plot is for when you're just wanting to plot something to get an idea of the shape of the data. For example, I may use a qplot when I'm wanting to check if my data is normally distributed (or not).
 
 ```{r}
+qplot(data = iris, x = Petal.Width)
 
+qplot(data = iris, x = Petal.Width, y = Petal.Length)
 ```
 
 
 ##### ggplot for when you're wanting to be intentional with plotting
 ```{r}
-ggplot(data = iris, aes(x = Petal.Width,  y = Petal.Length)) + geom_point()
+#component 1 data
+ggplot(data = iris)
+
+#component 2 variables
+ggplot(iris, aes(x = Petal.Width, y = Petal.Length))
+
+#component 3 variable
+ggplot(data = iris, aes(x = Petal.Width, y = Petal.Length)) + geom_point()
+
 
 ```
+
 
 ```{r}
-ggplot(iris, aes(Petal.Width)) +geom_histogram()
+ggplot(iris, aes(Petal.Width, Petal.Length)) +geom_histogram()
 
 ```
-
-
+ 
 
 Remember those open and closed brackets after geom_point(). Without those, nothing will happen.
 
 ***
 
 The type of graph you want to make has to match the classes of the inputs. You can check the class of any variable with the class function, or all variables in a data frame with the str function.
+
 
 
 ##### aes options
@@ -179,10 +187,12 @@ Colour is used to define a variable you want to group together and distinguish t
 
 
 ```{r}
-ggplot(iris, aes(Petal.Width, Petal.Length, colour = Species)) + geom_point()
 
-ggplot(iris, aes(Petal.Width, fill = Species)) +geom_histogram()
+ggplot(data = iris, aes(x = Petal.Width, y = Petal.Length, colour = Species)) + geom_point()
 
+ggplot(data = iris, aes(x = Petal.Width, colour = Species)) + geom_histogram()
+
+ggplot(data = iris, aes(x = Petal.Width, fill = Species)) + geom_histogram()
 
 ```
 
@@ -197,12 +207,11 @@ A helpful practice when making ggplots is to assign the plot you’ve made to an
 
 Plots can be saved as a variable using <- assign, and printed at any time by calling the variable. 
 ```{r}
+iris_petal_width_to_length_plot <- ggplot(data = iris, aes(x = Petal.Width, y = Petal.Length, colour = Species)) + geom_point()
 
-my_iris_plot <- ggplot(iris, aes(Petal.Width, Petal.Length, colour = Species)) + geom_point() 
+iris_petal_width_to_length_plot
 
-my_iris_plot
-
-
+iris_petal_width_to_length_plot + labs(title = "Iris Petal Length to Width") + theme_bw() 
 
 
 ```
@@ -217,8 +226,7 @@ __4. theme__ a theme is a set of visual parameters that controls the background,
 
 ```{r}
 
-my_iris_plot + theme_bw()
-
+iris_petal_width_to_length_plot + theme_classic()
 
 ```
 
@@ -242,13 +250,15 @@ mytheme3 <- theme(legend.text = element_text(face = "italic",colour="gray20",
                                            size = rel(1.8),family = "Helvetica"))
 
 
+
 ```
+
 
 add theme to plot
 ```{r}
-my_iris_plot + mytheme3
-
+iris_petal_width_to_length_plot + mytheme3
 ```
+
 
 
 
@@ -256,33 +266,33 @@ __5. stat__ a stat layer applies some kind of statistical transformation to the 
 
 
 ```{r}
-my_iris_plot +c
+
+iris_petal_width_to_length_plot + mytheme3 +stat_smooth(method = "lm")
 
 ```
-
-
-__6. labs__ modifies the titles and names of the axis, legend, title etc.
-
-```{r}
-
-ggplot(iris, aes(Petal.Width, Petal.Length)) + geom_point()  + 
-  labs(title = "Iris Petal Length to Petal Width", x = "Petal Width (cm)", y = "Petal Length (cm)") +
-  mytheme3 +
-  stat_smooth(method = "lm", aes(colour = Species)) 
-
-```
-
 
 
 
 After creating a plot use `ggsave` to save a plot in the current working directory. 
 
+Alternatively you could use the pdf function. 
+
+
 
 save your plot
 ```{r}
 dir.create("plots/")
-ggsave("plots/my_iris_plot.png")
+
+pdf("plots/iris_petal_width_to_length_plot.pdf")
+iris_petal_width_to_length_plot + mytheme3 + stat_smooth(method = "lm")
+dev.off()
 ```
+
+Alternatively
+```{r}
+ggsave("plots/iris_petal_width_to_length_plot.pdf", )
+```
+
 
 
 ***
@@ -628,7 +638,7 @@ Nothing should be placed randomly on a page. Make sure that every item has some 
 Tip: Try and group plots together from the same hypothesis group in your study, or plots that show results from the same method. 
 
 
-In R we can look to align and group graphics we create using patchwork(). 
+In R we can look to align and group graphics we create using patchwork() or facet_wrap(). 
 
 
 
@@ -654,6 +664,11 @@ bubble +{
 }
 }+
   plot_layout(ncol=1)
+
+
+ggplot(iris, aes(Sepal.Width, Sepal.Length)) + geom_point() +
+  facet_wrap(~Species)
+
 
 ```
 
