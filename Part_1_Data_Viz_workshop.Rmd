@@ -423,7 +423,7 @@ There are a number of things we need to consider:
 * Useability and accessibility: When we think about including colour in our graphics we need to make sure we think about useability and accessability; where we make sure that the palette (range of colours) we choose are not misleading, and are differentiated for those with varying colourblindness.
 
 
-![Traditional palettes vs....](/plots/Colour_blind_perceptually_uniform_colours.png)
+![Traditional palettes vs....](Colour_blind_perceptually_uniform_colours.png)
 
 
 Data types and structure can inform the type of palette we might look to use:
