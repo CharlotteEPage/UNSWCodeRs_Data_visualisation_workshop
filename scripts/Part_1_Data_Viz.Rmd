@@ -53,15 +53,11 @@ Start by loading your libraries:
 # if you need to install these run the code install.packages("package_name")
 
 library(tidyverse) #includes ggplot2
-
-
-library(ggthemes) 
 library(ggrepel) # for annotations 
 library(viridis) # for color blind friendly colours 
 library(RColorBrewer) # gives nice colour palettes for different types of data i.e. continuous vs discrete
-library(reshape2)
 library(ggsci) # interesting set of colour palettes
-library(patchwork) # for placing plots next to eachotherot
+library(patchwork) # for placing plots next to each other
 
 ```
 
@@ -423,7 +419,7 @@ There are a number of things we need to consider:
 * Useability and accessibility: When we think about including colour in our graphics we need to make sure we think about useability and accessability; where we make sure that the palette (range of colours) we choose are not misleading, and are differentiated for those with varying colourblindness.
 
 
-![Traditional palettes vs....](Colour_blind_perceptually_uniform_colours.png)
+![Traditional palettes vs....](/plots/Colour_blind_perceptually_uniform_colours.png)
 
 
 Data types and structure can inform the type of palette we might look to use:
